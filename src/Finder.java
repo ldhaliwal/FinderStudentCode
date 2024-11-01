@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+
 /**
  * Finder
  * A puzzle written by Zach Blick
@@ -12,6 +14,7 @@ import java.io.IOException;
 public class Finder {
     static final int RADIX = 256;
     static final long PRIME = 2147483647L;
+    static final long TABLE_SIZE = 1128889;
 
     private static final String INVALID = "INVALID KEY";
 
@@ -24,10 +27,21 @@ public class Finder {
             if (columns.length > Math.max(keyCol, valCol)) {
                 String key = columns[keyCol];
                 String value = columns[valCol];
-                // call something here that inserts the key and values into my made up data type
+                insert(key, value);
             }
         }
         br.close();
+    }
+
+    public void insert(String key, String value) {
+        long index = hash(key);
+
+        for (Pair entry : //thing??) {
+            if (entry.key.equals(key)) {
+                entry.value = value; // Update existing key
+                return;
+            }
+        }
     }
 
     public String query(String key){
