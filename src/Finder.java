@@ -14,7 +14,9 @@ import java.util.ArrayList;
 public class Finder {
     static final int RADIX = 256;
     static final long PRIME = 2147483647L;
-    static final long TABLE_SIZE = 1128889;
+    static final int TABLE_SIZE = 1128889;
+
+    public ArrayList<Pair> table = new ArrayList<>(TABLE_SIZE);
 
     private static final String INVALID = "INVALID KEY";
 
@@ -36,7 +38,7 @@ public class Finder {
     public void insert(String key, String value) {
         long index = hash(key);
 
-        for (Pair entry : //thing??) {
+        for (Pair entry : table) {
             if (entry.key.equals(key)) {
                 entry.value = value; // Update existing key
                 return;
