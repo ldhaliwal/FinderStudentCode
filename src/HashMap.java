@@ -1,60 +1,64 @@
 public class HashMap {
-    int DEFAULT_TABLE_SIZE = 100;
-    static final int RADIX = 256;
-    int tableSize;
-    int numEntries;
-    String[] keys;
-    String[] values;
+    public static final int DEFAULT_TABLE_SIZE = 9887;
+    public static final int RADIX = 256;
+    private int tableSize;
+    private int numEntries;
+    private Pair[] pairs;
+
     private static final String INVALID = "INVALID KEY";
 
     public HashMap() {
         tableSize = DEFAULT_TABLE_SIZE;
-        keys = new String[tableSize];
-        values = new String[tableSize];
+        pairs = new Pair[tableSize];
         numEntries = 0;
     }
 
     public void add(String key, String value){
-        // Checks if we need to re-size the table
-        checkSize();
+        // Checks the load factor to see if we need to re-size the table
+        if ((double) (numEntries/tableSize) >= 0.5){
+            resize();
+        }
 
         int index = hash(key);
-        while(keys[index] != null){
+
+        // If needed, keeps checking the next index until and empty spot is found
+        while(pairs[index] != null){
             index = (index + 1) % tableSize;
         }
-        keys[index] = key;
-        values[index] = value;
+
+        // Initializes the new pair and increments the number of entries
+        pairs[index] = new Pair(key, value);
         numEntries++;
     }
 
     public String get(String key) {
-        int start = hash(key);
-        for (int i = start; i < tableSize; i++) {
-            if (key.equals(keys[i])) {
-                return values[i];
+        int index = hash(key);
+
+        // Loops through the pairs until a null spot is found
+        while(pairs[index] != null){
+            // Checks if the correct key is at the current spot, and if so returns the value
+            if (key.equals(pairs[index].getKey())) {
+                return pairs[index].getValue();
             }
+
+            // Moves to the next index and wraps around if needed
+            index += 1;
+            index = index % tableSize;
         }
         return INVALID;
-    }
-
-    public void checkSize(){
-        if ((double) (numEntries/tableSize) >= 0.5){
-            resize();
-        }
     }
 
     public void resize(){
         tableSize *= 2;
 
-        String[] oldKeys = keys;
-        String[] oldValues = values;
 
-        keys = new String[tableSize];
-        values = new String[tableSize];
+        Pair[] oldPairs = pairs;
+        pairs = new Pair[tableSize];
 
+        // Rehashes all the existing pairs and re-inserts them into the new table
         for(int i = 0; i < tableSize/2; i++){
-            if(oldKeys != null){
-                add(oldKeys[i], oldValues[i]);
+            if(oldPairs[i] != null){
+                add(oldPairs[i].getKey(), oldPairs[i].getValue());
             }
         }
     }
@@ -67,5 +71,4 @@ public class HashMap {
         }
         return hash;
     }
-
 }
