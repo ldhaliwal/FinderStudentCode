@@ -15,9 +15,13 @@ public class HashMap {
     }
 
     public void add(String key, String value){
+        // Checks if we need to re-size the table
         checkSize();
 
         int index = hash(key);
+        while(keys[index] != null){
+            index = (index + 1) % tableSize;
+        }
         keys[index] = key;
         values[index] = value;
         numEntries++;
@@ -34,7 +38,7 @@ public class HashMap {
     }
 
     public void checkSize(){
-        if ((double) (numEntries/tableSize) > 0.5){
+        if ((double) (numEntries/tableSize) >= 0.5){
             resize();
         }
     }
