@@ -16,49 +16,45 @@ public class Finder {
     static final long PRIME = 2147483647L;
     static final int TABLE_SIZE = 1128889;
 
-    public ArrayList<Pair> table = new ArrayList<>(TABLE_SIZE);
+    public static HashMap table;
 
     private static final String INVALID = "INVALID KEY";
 
-    public Finder() {}
+    public Finder() {
+        table = new HashMap();
+    }
 
     public void buildTable(BufferedReader br, int keyCol, int valCol) throws IOException {
         String line;
         while ((line = br.readLine()) != null) {
             String[] columns = line.split(",");
-            if (columns.length > Math.max(keyCol, valCol)) {
-                String key = columns[keyCol];
-                String value = columns[valCol];
-                insert(key, value);
-            }
+            table.add(columns[keyCol], columns[valCol]);
         }
         br.close();
     }
 
-    public void insert(String key, String value) {
-        long index = hash(key);
-
-        for (Pair entry : table) {
-            if (entry.key.equals(key)) {
-                entry.value = value; // Update existing key
-                return;
-            }
-        }
-    }
+//    public void insert(String key, String value) {
+//        long index = hash(key);
+//
+//        for (Pair entry : table) {
+//            if (entry.key.equals(key)) {
+//                entry.value = value; // Update existing key
+//                return;
+//            }
+//        }
+//    }
 
     public String query(String key){
         // TODO: Complete the query() function!
-        long index = hash(key);
-
-        return INVALID;
+        return table.get(key);
     }
 
-    public static long hash(String text){
-        long hash = 0;
-
-        for(int i = 0; i < text.length(); i++) {
-            hash = (hash * RADIX + text.charAt(i)) % PRIME;
-        }
-        return hash;
-    }
+//    public static long hash(String text){
+//        long hash = 0;
+//
+//        for(int i = 0; i < text.length(); i++) {
+//            hash = (hash * RADIX + text.charAt(i)) % table.tableSize;
+//        }
+//        return hash;
+//    }
 }
