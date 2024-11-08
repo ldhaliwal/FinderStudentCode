@@ -22,6 +22,7 @@ public class Finder {
 
     public void buildTable(BufferedReader br, int keyCol, int valCol) throws IOException {
         String line;
+        // Reads in the data
         while ((line = br.readLine()) != null) {
             String[] columns = line.split(",");
             table.add(columns[keyCol], columns[valCol]);

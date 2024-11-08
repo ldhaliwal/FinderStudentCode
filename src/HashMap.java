@@ -42,8 +42,7 @@ public class HashMap {
             }
 
             // Moves to the next index and wraps around if needed
-            index += 1;
-            index = index % tableSize;
+            index = (index + 1) % tableSize;
         }
         return INVALID;
     }
@@ -51,7 +50,7 @@ public class HashMap {
     public void resize(){
         tableSize *= 2;
 
-
+        // Creates new table that is double the size
         Pair[] oldPairs = pairs;
         pairs = new Pair[tableSize];
 
@@ -66,6 +65,7 @@ public class HashMap {
     private int hash(String key) {
         int hash = 0;
 
+        // Hashes the key
         for (int i = 0; i < key.length(); i++){
             hash = (hash * RADIX + key.charAt(i)) % tableSize;
         }
